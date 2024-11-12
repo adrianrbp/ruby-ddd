@@ -1,79 +1,61 @@
 require 'minitest/autorun'
 require_relative '../lib/logic/snack_machine'
+require_relative '../lib/logic/money'
 
 class SnackMachineTest < Minitest::Test
   def setup
-    @snack_machine = Logic::SnackMachine.new
+    @initial_money = Logic::Money.new(1, 2, 3, 4, 5, 6)
+    @snack_machine = Logic::SnackMachine.new(@initial_money)
   end
 
-  def test_initial_counts_are_zero
-    assert_equal 0, @snack_machine.one_cent_count
-    assert_equal 0, @snack_machine.ten_cent_count
-    assert_equal 0, @snack_machine.quarter_count
-    assert_equal 0, @snack_machine.one_dollar_count
-    assert_equal 0, @snack_machine.five_dollar_count
-    assert_equal 0, @snack_machine.twenty_dollar_count
+  def test_insert_money
+    money_to_insert = Logic::Money.new(1, 1, 1, 1, 1, 1)
 
-    assert_equal 0, @snack_machine.one_cent_count_in_transaction
-    assert_equal 0, @snack_machine.ten_cent_count_in_transaction
-    assert_equal 0, @snack_machine.quarter_count_in_transaction
-    assert_equal 0, @snack_machine.one_dollar_count_in_transaction
-    assert_equal 0, @snack_machine.five_dollar_count_in_transaction
-    assert_equal 0, @snack_machine.twenty_dollar_count_in_transaction
+    @snack_machine.insert_money(money_to_insert)
+
+    assert_equal 1, @snack_machine.money_in_transaction.one_cent_count
+    assert_equal 1, @snack_machine.money_in_transaction.ten_cent_count
+    assert_equal 1, @snack_machine.money_in_transaction.quarter_count
+    assert_equal 1, @snack_machine.money_in_transaction.one_dollar_count
+    assert_equal 1, @snack_machine.money_in_transaction.five_dollar_count
+    assert_equal 1, @snack_machine.money_in_transaction.twenty_dollar_count
   end
 
-  def test_insert_money_increments_transaction_counts
-    @snack_machine.insert_money(1, 2, 3, 1, 0, 1)
+  def test_return_money
+    money_to_insert = Logic::Money.new(1, 1, 1, 1, 1, 1)
+    @snack_machine.insert_money(money_to_insert)
 
-    assert_equal 1, @snack_machine.one_cent_count_in_transaction
-    assert_equal 2, @snack_machine.ten_cent_count_in_transaction
-    assert_equal 3, @snack_machine.quarter_count_in_transaction
-    assert_equal 1, @snack_machine.one_dollar_count_in_transaction
-    assert_equal 0, @snack_machine.five_dollar_count_in_transaction
-    assert_equal 1, @snack_machine.twenty_dollar_count_in_transaction
-  end
-
-  def test_insert_money_multiple_times
-    @snack_machine.insert_money(1, 1, 1, 1, 1, 1)
-    @snack_machine.insert_money(2, 2, 2, 2, 2, 2)
-
-    assert_equal 3, @snack_machine.one_cent_count_in_transaction
-    assert_equal 3, @snack_machine.ten_cent_count_in_transaction
-    assert_equal 3, @snack_machine.quarter_count_in_transaction
-    assert_equal 3, @snack_machine.one_dollar_count_in_transaction
-    assert_equal 3, @snack_machine.five_dollar_count_in_transaction
-    assert_equal 3, @snack_machine.twenty_dollar_count_in_transaction
-  end
-
-  def test_return_money_resets_transaction_counts
-    @snack_machine.insert_money(1, 2, 3, 4, 5, 6)
+    # Return the money and verify that the transaction is reset
     @snack_machine.return_money
 
-    assert_equal 0, @snack_machine.one_cent_count_in_transaction
-    assert_equal 0, @snack_machine.ten_cent_count_in_transaction
-    assert_equal 0, @snack_machine.quarter_count_in_transaction
-    assert_equal 0, @snack_machine.one_dollar_count_in_transaction
-    assert_equal 0, @snack_machine.five_dollar_count_in_transaction
-    assert_equal 0, @snack_machine.twenty_dollar_count_in_transaction
+    assert_equal 0, @snack_machine.money_in_transaction.one_cent_count
+    assert_equal 0, @snack_machine.money_in_transaction.ten_cent_count
+    assert_equal 0, @snack_machine.money_in_transaction.quarter_count
+    assert_equal 0, @snack_machine.money_in_transaction.one_dollar_count
+    assert_equal 0, @snack_machine.money_in_transaction.five_dollar_count
+    assert_equal 0, @snack_machine.money_in_transaction.twenty_dollar_count
   end
-  
-  def test_buy_snack_transfers_and_resets_transaction_counts
-    @snack_machine.insert_money(2, 3, 4, 1, 1, 1)
-    
+
+  def test_buy_snack
+    money_to_insert = Logic::Money.new(1, 1, 1, 1, 1, 1)
+    @snack_machine.insert_money(money_to_insert)
+
+    # Buy snack and check if the money is transferred correctly
     @snack_machine.buy_snack
-  
-    assert_equal 2, @snack_machine.one_cent_count
-    assert_equal 3, @snack_machine.ten_cent_count
-    assert_equal 4, @snack_machine.quarter_count
-    assert_equal 1, @snack_machine.one_dollar_count
-    assert_equal 1, @snack_machine.five_dollar_count
-    assert_equal 1, @snack_machine.twenty_dollar_count
-  
-    assert_equal 0, @snack_machine.one_cent_count_in_transaction
-    assert_equal 0, @snack_machine.ten_cent_count_in_transaction
-    assert_equal 0, @snack_machine.quarter_count_in_transaction
-    assert_equal 0, @snack_machine.one_dollar_count_in_transaction
-    assert_equal 0, @snack_machine.five_dollar_count_in_transaction
-    assert_equal 0, @snack_machine.twenty_dollar_count_in_transaction
+
+    assert_equal 2, @snack_machine.money_inside.one_cent_count
+    assert_equal 3, @snack_machine.money_inside.ten_cent_count
+    assert_equal 4, @snack_machine.money_inside.quarter_count
+    assert_equal 5, @snack_machine.money_inside.one_dollar_count
+    assert_equal 6, @snack_machine.money_inside.five_dollar_count
+    assert_equal 7, @snack_machine.money_inside.twenty_dollar_count
+
+    # Ensure transaction is reset after buying snack
+    assert_equal 0, @snack_machine.money_in_transaction.one_cent_count
+    assert_equal 0, @snack_machine.money_in_transaction.ten_cent_count
+    assert_equal 0, @snack_machine.money_in_transaction.quarter_count
+    assert_equal 0, @snack_machine.money_in_transaction.one_dollar_count
+    assert_equal 0, @snack_machine.money_in_transaction.five_dollar_count
+    assert_equal 0, @snack_machine.money_in_transaction.twenty_dollar_count
   end
 end
