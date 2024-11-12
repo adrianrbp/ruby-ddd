@@ -49,6 +49,22 @@ module Logic
       @five_dollar_count_in_transaction = 0
       @twenty_dollar_count_in_transaction = 0
     end
+
+    def buy_snack
+      @one_cent_count += @one_cent_count_in_transaction
+      @ten_cent_count += @ten_cent_count_in_transaction
+      @quarter_count += @quarter_count_in_transaction
+      @one_dollar_count += @one_dollar_count_in_transaction
+      @five_dollar_count += @five_dollar_count_in_transaction
+      @twenty_dollar_count += @twenty_dollar_count_in_transaction
+
+      @one_cent_count_in_transaction = 0
+      @ten_cent_count_in_transaction = 0
+      @quarter_count_in_transaction = 0
+      @one_dollar_count_in_transaction = 0
+      @five_dollar_count_in_transaction = 0
+      @twenty_dollar_count_in_transaction = 0
+    end
   end
 end
 

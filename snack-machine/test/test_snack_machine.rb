@@ -56,4 +56,24 @@ class SnackMachineTest < Minitest::Test
     assert_equal 0, @snack_machine.five_dollar_count_in_transaction
     assert_equal 0, @snack_machine.twenty_dollar_count_in_transaction
   end
+  
+  def test_buy_snack_transfers_and_resets_transaction_counts
+    @snack_machine.insert_money(2, 3, 4, 1, 1, 1)
+    
+    @snack_machine.buy_snack
+  
+    assert_equal 2, @snack_machine.one_cent_count
+    assert_equal 3, @snack_machine.ten_cent_count
+    assert_equal 4, @snack_machine.quarter_count
+    assert_equal 1, @snack_machine.one_dollar_count
+    assert_equal 1, @snack_machine.five_dollar_count
+    assert_equal 1, @snack_machine.twenty_dollar_count
+  
+    assert_equal 0, @snack_machine.one_cent_count_in_transaction
+    assert_equal 0, @snack_machine.ten_cent_count_in_transaction
+    assert_equal 0, @snack_machine.quarter_count_in_transaction
+    assert_equal 0, @snack_machine.one_dollar_count_in_transaction
+    assert_equal 0, @snack_machine.five_dollar_count_in_transaction
+    assert_equal 0, @snack_machine.twenty_dollar_count_in_transaction
+  end
 end
