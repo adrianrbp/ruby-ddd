@@ -1,0 +1,36 @@
+{
+    "name": "Ruby Algorithms",
+    "image": "ruby:3.2.2-slim",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "containerUser": "root",
+    "remoteUser": "root",
+    "postCreateCommand": ".devcontainer/install-git.sh",
+    "customizations": {
+        "vscode": {
+			"settings": {
+                "workbench.iconTheme": "material-icon-theme",
+                "workbench.colorTheme": "GitHub Dark"
+			},
+            "extensions": [
+                "iliazeus.vscode-ansi",
+                "usernamehw.errorlens",
+                "waderyan.gitblame",
+                "GitHub.github-vscode-theme",
+                "eamodio.gitlens",
+                "IBM.output-colorizer",
+                // Ruby
+                "castwide.solargraph",
+                "connorshea.vscode-ruby-test-adapter",
+                "Shopify.ruby-extensions-pack",
+                "Shopify.ruby-lsp",
+                "sorbet.sorbet-vscode-extension",
+                "hbenl.vscode-test-explorer",
+                "bung87.vscode-gemfile",
+                "pkief.material-icon-theme",
+                "redhat.vscode-yaml",
+                "vortizhe.simple-ruby-erb",
+                "KoichiSasada.vscode-rdbg"
+            ]
+        }
+    }
+}
